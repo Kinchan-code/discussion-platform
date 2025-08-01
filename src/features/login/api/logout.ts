@@ -5,9 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { PathName } from '@/models/path-enums';
 
 import { useHeaderStore } from '@/store/header-store';
-import { useVoteThreadStore } from '@/store/vote-thread-store';
-import { useVoteReviewStore } from '@/store/vote-review-store';
-import { useVoteCommentStore } from '@/store/vote-comment-store';
 
 /**
  * API call to log out user
@@ -65,11 +62,6 @@ export const useLogout = () => {
     // Optionally clear header and auth modal state if you want a full reset:
     // localStorage.removeItem('header-store');
     // localStorage.removeItem('auth-modal-storage');
-
-    // Also clear in-memory Zustand state for votes (prevents stale UI after logout)
-    useVoteThreadStore.setState({ vote: {} });
-    useVoteReviewStore.setState({ votes: {} });
-    useVoteCommentStore.setState({ votes: {} });
   };
 
   return useMutation({
