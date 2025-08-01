@@ -3,7 +3,11 @@ import { useMutation } from '@tanstack/react-query';
 import { useAuthStore } from '@/store/auth-store';
 import { useNavigate } from 'react-router-dom';
 import { PathName } from '@/models/path-enums';
+
 import { useHeaderStore } from '@/store/header-store';
+import { useVoteThreadStore } from '@/store/vote-thread-store';
+import { useVoteReviewStore } from '@/store/vote-review-store';
+import { useVoteCommentStore } from '@/store/vote-comment-store';
 
 /**
  * API call to log out user
@@ -45,19 +49,41 @@ export const useLogout = () => {
   const navigate = useNavigate();
   const { setIsOpen } = useHeaderStore();
 
+  // Helper to clear all relevant persisted Zustand stores and in-memory state
+  const clearPersistedStores = () => {
+    // Auth store is cleared by logout()
+    localStorage.removeItem('review-store');
+    localStorage.removeItem('reply-store');
+    localStorage.removeItem('vote-thread-storage');
+    localStorage.removeItem('vote-review-storage');
+    localStorage.removeItem('vote-comment-storage');
+    localStorage.removeItem('thread-storage');
+    localStorage.removeItem('profile-modal-storage');
+    localStorage.removeItem('filters-storage');
+    localStorage.removeItem('select-input-store');
+    localStorage.removeItem('search-dialog-store');
+    // Optionally clear header and auth modal state if you want a full reset:
+    // localStorage.removeItem('header-store');
+    // localStorage.removeItem('auth-modal-storage');
+
+    // Also clear in-memory Zustand state for votes (prevents stale UI after logout)
+    useVoteThreadStore.setState({ vote: {} });
+    useVoteReviewStore.setState({ votes: {} });
+    useVoteCommentStore.setState({ votes: {} });
+  };
+
   return useMutation({
     mutationKey: ['logout'],
     mutationFn: () => logoutApi(),
     onSuccess: () => {
-      // Use the auth store's logout method which handles everything
       logout();
-      // Redirect to login page after logout
+      clearPersistedStores();
       navigate(PathName.HOMEPAGE);
-      setIsOpen(false); // Close the header menu if open
+      setIsOpen(false);
     },
     onError: () => {
-      // Even if API fails, log out locally
       logout();
+      clearPersistedStores();
       navigate(PathName.LOGIN);
     },
   });
