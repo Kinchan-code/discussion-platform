@@ -233,7 +233,10 @@ function CreateProtocolForm() {
             Back
           </Button>
 
-          <Button type='submit'>
+          <Button
+            type='submit'
+            disabled={isPending}
+          >
             {isPending ? (
               <div className='flex items-center gap-2'>
                 <Loader className='size-3 md:size-4 animate-spin' />

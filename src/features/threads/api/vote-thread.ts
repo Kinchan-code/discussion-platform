@@ -65,6 +65,8 @@ export const useVoteThread = () => {
       // Check if vote was removed or added based on response structure and message
       const isVoteRemoved = !data.data.vote || data.message.includes('removed');
 
+      // Set the vote in the store
+
       if (isVoteRemoved) {
         // Vote was removed - set to null
         setVote(data.data.thread.id, null);
@@ -77,7 +79,7 @@ export const useVoteThread = () => {
         queryKey: ['threads'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['threads-protocol'],
+        queryKey: ['threads-protocols-infinite'],
       });
       queryClient.invalidateQueries({
         queryKey: ['threads-infinite'],
