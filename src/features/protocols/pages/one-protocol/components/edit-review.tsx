@@ -95,7 +95,6 @@ function EditReview({ setOpen }: EditReviewProps) {
 
   const handleCancel = () => {
     setOpenEdit(false); // Close the review modal
-    setSelectedRating(0); // Reset the rating
     form.reset(); // Reset the form
   };
 
