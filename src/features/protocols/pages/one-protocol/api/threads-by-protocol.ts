@@ -103,5 +103,7 @@ export const useGetThreadsByProtocolInfinite = ({
     refetchOnWindowFocus: false,
     initialPageParam: 1,
     enabled: !!protocolId, // Only run query if protocolId exists
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 10, // 10 minutes
   });
 };

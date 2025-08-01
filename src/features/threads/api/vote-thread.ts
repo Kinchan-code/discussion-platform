@@ -77,7 +77,7 @@ export const useVoteThread = () => {
         queryKey: ['threads'],
       });
       queryClient.invalidateQueries({
-        queryKey: ['threads-protocol'],
+        queryKey: ['threads-protocols-infinite'],
       });
       queryClient.invalidateQueries({
         queryKey: ['threads-infinite'],
