@@ -36,7 +36,7 @@ export const getThreads = async ({
         sort: params.sort,
         protocol_id: params.protocol_id || undefined,
         page: params.page || 1,
-        perPage: params.perPage || 10,
+        per_page: params.perPage || 5,
       },
     });
 
