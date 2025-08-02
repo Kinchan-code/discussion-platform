@@ -116,17 +116,19 @@ function Filters({ contentType }: FiltersProps) {
         <h3 className='font-medium text-sm md:text-base text-gray-900'>
           {getTitle()}
         </h3>
-        <Button
-          variant='outline'
-          onClick={toggleFilter}
-          // size='sm'
-          className='flex items-center justify-center text-xs md:text-base'
-        >
-          <SlidersHorizontal className='size-3 md:size-4 text-center' />
-          <span className=' font-medium  text-gray-700'>
-            {isOpenFilter ? 'Hide' : 'Show'} Filters
-          </span>
-        </Button>
+        {contentType === 'protocols' && (
+          <Button
+            variant='outline'
+            onClick={toggleFilter}
+            // size='sm'
+            className='flex items-center justify-center text-xs md:text-base'
+          >
+            <SlidersHorizontal className='size-3 md:size-4 text-center' />
+            <span className=' font-medium  text-gray-700'>
+              {isOpenFilter ? 'Hide' : 'Show'} Filters
+            </span>
+          </Button>
+        )}
       </div>
 
       {/* Quick Filters */}
@@ -201,7 +203,7 @@ function Filters({ contentType }: FiltersProps) {
       </div>
 
       {/* Advanced Filters */}
-      {isOpenFilter && (
+      {isOpenFilter && contentType === 'protocols' && (
         <div className='border-t border-gray-200 pt-4 space-y-4'>
           <span className='text-xs md:text-sm font-medium text-gray-700 mb-2 block'>
             Popular Tags:

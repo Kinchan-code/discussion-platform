@@ -38,7 +38,6 @@ function AllThreads() {
   } = useGetThreadsInfinite({
     params: {
       sort: params.get('sort') || 'recent',
-      tags: params.get('tags') || '',
       protocol_id: params.get('protocol')
         ? Number(params.get('protocol')) || null
         : null,

@@ -1,5 +1,5 @@
 import { Loader } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -74,6 +74,15 @@ function EditReview({ setOpen }: EditReviewProps) {
       feedback: selectedReview?.feedback ?? '',
     },
   });
+
+  // Update form values when selectedReview changes
+  useEffect(() => {
+    if (selectedReview) {
+      form.setValue('rating', selectedReview.rating);
+      form.setValue('feedback', selectedReview.feedback ?? '');
+      setSelectedRating(selectedReview.rating);
+    }
+  }, [selectedReview, form]);
 
   const handleRatingChange = (rating: number) => {
     setSelectedRating(rating);

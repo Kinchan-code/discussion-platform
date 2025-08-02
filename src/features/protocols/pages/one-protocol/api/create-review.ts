@@ -1,5 +1,6 @@
 import api from '@/api/axios-instance';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useReviewStore } from '@/store/review-store';
 
 import type { Response, ResponseError } from '@/models/response';
 import type { Reviews } from '@/models/reviews';
@@ -66,11 +67,15 @@ export const createReview = async (
 
 export const useCreateReview = (protocolId: string, onSuccess?: () => void) => {
   const queryClient = useQueryClient();
+  const { setSelectedReview } = useReviewStore();
 
   return useMutation<Response<Reviews>, ResponseError, CreateReview>({
     mutationKey: ['create-review', protocolId],
     mutationFn: (review) => createReview(protocolId, review),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // Update the selected review in the store with the newly created review
+      setSelectedReview(data.data);
+
       // Optionally invalidate queries or update state after successful creation
       onSuccess?.();
       queryClient.invalidateQueries({

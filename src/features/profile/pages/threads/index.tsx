@@ -38,7 +38,6 @@ function Threads() {
     useGetThreadsInfinite({
       params: {
         sort: 'recent',
-        tags: '',
         author: user?.name || 'current_user',
         perPage: 5,
       },
