@@ -66,7 +66,7 @@ function ThreadDetail() {
       navigate(PathName.THREADS);
     }
   );
-  const { mutateAsync } = useVoteThread();
+  const { mutateAsync, isPending: isVotePending } = useVoteThread();
   const { executeProtectedAction } = useProtectedAction();
   const { hasUpvoted, hasDownvoted } = useVoteThreadStore();
   const { setSelectedThread } = useThreadStore();
@@ -225,6 +225,7 @@ function ThreadDetail() {
                   }
                   upVoted={isUpvoted}
                   downVoted={isDownvoted}
+                  isComputing={isVotePending}
                   align='left'
                   direction='horizontal'
                 />

@@ -16,7 +16,6 @@ import type { ResponseError, Response } from '@/models/response';
 
 interface Params {
   sort: string;
-  tags: string;
   protocol_id?: number | null;
   page?: number;
   perPage?: number;
@@ -35,7 +34,6 @@ export const getThreads = async ({
       params: {
         author: params.author || undefined,
         sort: params.sort,
-        tags: params.tags,
         protocol_id: params.protocol_id || undefined,
         page: params.page || 1,
         perPage: params.perPage || 10,
@@ -68,7 +66,7 @@ export const getThreads = async ({
 
 export const useGetThreads = ({ params }: QueryParams) => {
   return useQuery<Response<Threads[]>, ResponseError>({
-    queryKey: ['threads', params.sort, params.tags, params.protocol_id],
+    queryKey: ['threads', params.sort, params.protocol_id],
     queryFn: () => getThreads({ params }),
     refetchOnWindowFocus: false,
   });
@@ -85,12 +83,7 @@ export const useGetThreads = ({ params }: QueryParams) => {
 
 export const useGetThreadsInfinite = ({ params }: QueryParams) => {
   return useInfiniteQuery<Response<Threads[]>, ResponseError>({
-    queryKey: [
-      'threads-infinite',
-      params.sort,
-      params.tags,
-      params.protocol_id,
-    ],
+    queryKey: ['threads-infinite', params.sort, params.protocol_id],
     queryFn: ({ pageParam = 1 }) =>
       getThreads({ params: { ...params, page: pageParam as number } }),
     getNextPageParam: (lastPage) => {
