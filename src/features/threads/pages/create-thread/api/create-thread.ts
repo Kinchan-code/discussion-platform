@@ -60,6 +60,10 @@ export const useCreateThread = (onSuccess?: () => void) => {
       // Invalidate threads query to refetch after creating a new thread
       queryClient.invalidateQueries({ queryKey: ['threads-infinite'] });
       queryClient.invalidateQueries({ queryKey: ['one-thread'] });
+      queryClient.invalidateQueries({
+        queryKey: ['threads-protocols-infinite'],
+      });
+
       onSuccess?.();
       navigate(`${PathName.THREADS}/${data.data.id}`);
     },
