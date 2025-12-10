@@ -22,7 +22,7 @@ export const createThread = async (
   query: CreateThreadSchemaType
 ): Promise<Response<Threads>> => {
   try {
-    const response = await api.post<Response<Threads>>("/threads", query);
+    const response = await api.post<Response<Threads>>('/threads', query);
 
     const data = response.data;
 
@@ -54,7 +54,7 @@ export const useCreateThread = (onSuccess?: () => void) => {
   const navigate = useNavigate();
 
   return useMutation<Response<Threads>, ResponseError, CreateThreadSchemaType>({
-    mutationKey: ["create-thread"],
+    mutationKey: ['create-thread'],
     mutationFn: (params: CreateThreadSchemaType) => createThread(params),
     onSuccess: (data) => {
       // Invalidate threads query to refetch after creating a new thread
