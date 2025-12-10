@@ -1,9 +1,9 @@
-import { Loader } from '@/components/ui/loader';
-import { routes } from '@/lib/routes';
-import { Suspense } from 'react';
-import { RouterProvider } from 'react-router-dom';
-import { AuthInitializer } from '@/components/auth-initializer';
-import { Toaster } from 'sonner';
+import { Loader } from "@/components/ui/loader";
+import { routes } from "@/lib/routes";
+import { Suspense } from "react";
+import { RouterProvider } from "react-router-dom";
+import { AuthInitializer } from "@/components/auth-initializer";
+import { Toaster } from "sonner";
 
 /**
  * App Component
@@ -27,7 +27,7 @@ function App() {
     <AuthInitializer>
       <Suspense
         fallback={
-          <main className='h-screen'>
+          <main className="h-screen">
             <Loader />
           </main>
         }

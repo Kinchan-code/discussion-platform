@@ -1,5 +1,5 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 /**
  * Utility function to merge class names
@@ -31,7 +31,7 @@ export const updateUrlParam = (paramName: string, value: string | null) => {
 
   const queryString = searchParams.toString();
   const newUrl = queryString ? `?${queryString}` : window.location.pathname;
-  window.history.replaceState(null, '', newUrl);
+  window.history.replaceState(null, "", newUrl);
 };
 
 /**
@@ -49,20 +49,38 @@ export const formatDate = (
 
     // Check if the date is valid
     if (isNaN(date.getTime())) {
-      console.warn('Invalid date string provided:', isoDateString);
-      return 'Invalid Date';
+      console.warn("Invalid date string provided:", isoDateString);
+      return "Invalid Date";
     }
 
     // Default options for a clean date format
     const defaultOptions: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     };
 
     return date.toLocaleDateString(undefined, options || defaultOptions);
   } catch (error) {
-    console.error('Error formatting date:', error);
-    return 'Invalid Date';
+    console.error("Error formatting date:", error);
+    return "Invalid Date";
   }
+};
+
+/**
+ * Converts a string to a URL-friendly slug
+ * @param text The text to convert to a slug
+ * @returns A URL-friendly slug string
+ *
+ * @example
+ * slugify("My Awesome Protocol") // Returns: "my-awesome-protocol"
+ * slugify("Thread #123") // Returns: "thread-123"
+ */
+export const slugify = (text: string): string => {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "") // Remove special characters
+    .replace(/[\s_-]+/g, "-") // Replace spaces and underscores with hyphens
+    .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
 };

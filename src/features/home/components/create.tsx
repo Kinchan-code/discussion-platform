@@ -1,7 +1,7 @@
-import { Plus } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-import { Button } from '@/components/ui/button/button';
+import { Button } from "@/components/ui/button/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,10 +9,10 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useProtectedAction } from '@/hooks/use-protected-action';
-import { PathName } from '@/models/path-enums';
-import { useHeaderStore } from '@/store/header-store';
+} from "@/components/ui/dropdown-menu";
+import { useProtectedAction } from "@/hooks/use-protected-action";
+import { PathName } from "@/enums/path-enums";
+import { useHeaderStore } from "@/store/header-store";
 
 /**
  * Create Component
@@ -38,8 +38,8 @@ import { useHeaderStore } from '@/store/header-store';
  */
 
 const menuItems = [
-  { id: 1, label: 'Create Protocol' },
-  { id: 2, label: 'Create Discussion' },
+  { id: 1, label: "Create Protocol" },
+  { id: 2, label: "Create Discussion" },
 ];
 
 function Create() {
@@ -65,18 +65,18 @@ function Create() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button>
-          <Plus className='w-5 h-5' />
+          <Plus className="w-5 h-5" />
           Create
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='center'>
+      <DropdownMenuContent align="center">
         <DropdownMenuLabel>Contribute</DropdownMenuLabel>
         <DropdownMenuGroup>
           {menuItems.map((item) => (
             <DropdownMenuItem
               key={item.id}
               onClick={
-                item.label === 'Create Protocol'
+                item.label === "Create Protocol"
                   ? handleCreateProtocol
                   : handleCreateDiscussion
               }

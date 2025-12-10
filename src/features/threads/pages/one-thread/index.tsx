@@ -1,9 +1,6 @@
-import { useParams } from 'react-router-dom';
-
-import GoBackButton from '@/components/go-back-button';
-import ThreadDetail from '@/features/threads/pages/one-thread/components/thread-detail';
-
-import { CommentSection } from '@/features/threads/pages/one-thread/components/comment-section';
+import GoBackButton from "@/components/go-back-button";
+import { CommentSection } from "@/components/comments";
+import ThreadDetail from "@/features/threads/pages/one-thread/components/thread-detail";
 
 /**
  * OneThread Component
@@ -22,9 +19,8 @@ import { CommentSection } from '@/features/threads/pages/one-thread/components/c
  */
 
 function OneThread() {
-  const { threadId } = useParams();
   return (
-    <main className='flex flex-col gap-4 h-full'>
+    <main className="flex flex-col gap-4 h-full">
       <section>
         <GoBackButton />
       </section>
@@ -32,7 +28,7 @@ function OneThread() {
         <ThreadDetail />
       </section>
       <section>
-        <CommentSection threadId={threadId || ''} />
+        <CommentSection />
       </section>
     </main>
   );

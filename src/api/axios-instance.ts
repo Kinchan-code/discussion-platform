@@ -1,5 +1,6 @@
-import axios from 'axios';
-import { API_URL } from '@/lib/constants';
+import axios from "axios";
+import { API_URL } from "@/lib/constants";
+import { useAuthStore } from "@/store/auth-store";
 
 /**
  * Axios instance for the API
@@ -13,7 +14,7 @@ import { API_URL } from '@/lib/constants';
 const api = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -26,7 +27,8 @@ const api = axios.create({
  */
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
+  // Get token directly from store state (not using hook)
+  const token = useAuthStore.getState().token;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

@@ -1,6 +1,6 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from "react-router-dom";
 
-import { Loader } from '@/components/ui/loader';
+import { Loader } from "@/components/ui/loader";
 import {
   AllProtocols,
   AllThreads,
@@ -23,7 +23,9 @@ import {
   UserReplies,
   UserReviews,
   UserThreads,
-} from '@/lib/lazy';
+  Comments,
+  Replies,
+} from "@/lib/lazy";
 
 /**
  * Routes Configuration
@@ -42,116 +44,126 @@ import {
 export const routes = createBrowserRouter(
   [
     {
-      id: 'login',
-      path: '/login',
+      id: "login",
+      path: "/login",
       element: <Login />,
     },
     {
-      id: 'register',
-      path: '/register',
+      id: "register",
+      path: "/register",
       element: <Register />,
     },
     {
-      id: 'root',
-      path: '/',
+      id: "root",
+      path: "/",
       element: <Home />,
       children: [
         {
-          id: 'dashboard',
+          id: "dashboard",
           index: true,
           element: <Dashboard />,
         },
         {
-          id: 'profile',
-          path: '/profile',
+          id: "profile",
+          path: "/profile",
           element: <Profile />,
           children: [
             {
-              id: 'user-protocols',
-              path: 'protocols',
+              id: "user-protocols",
+              path: "protocols",
               element: <UserProtocols />,
             },
             {
-              id: 'user-threads',
-              path: 'threads',
+              id: "user-threads",
+              path: "threads",
               element: <UserThreads />,
             },
             {
-              id: 'user-replies',
-              path: 'replies',
+              id: "user-replies",
+              path: "replies",
               element: <UserReplies />,
             },
             {
-              id: 'user-comments',
-              path: 'comments',
+              id: "user-comments",
+              path: "comments",
               element: <UserComments />,
             },
             {
-              id: 'user-reviews',
-              path: 'reviews',
+              id: "user-reviews",
+              path: "reviews",
               element: <UserReviews />,
             },
           ],
         },
         {
-          id: 'protocols',
-          path: 'protocols',
+          id: "protocols",
+          path: "protocols",
           element: <Protocols />,
           children: [
             {
-              id: 'create-protocol',
-              path: 'create',
+              id: "create-protocol",
+              path: "create",
               element: <CreateProtocol />,
             },
             {
-              id: 'edit-protocol',
-              path: ':protocolId/edit',
+              id: "edit-protocol",
+              path: ":protocolId/edit",
               element: <EditProtocol />,
             },
             {
-              id: 'all-protocols',
+              id: "all-protocols",
               index: true,
               element: <AllProtocols />,
             },
             {
-              id: 'one-protocol',
-              path: ':protocolId',
+              id: "one-protocol",
+              path: ":protocolId/:title",
               element: <OneProtocol />,
             },
           ],
         },
         {
-          id: 'threads',
-          path: 'threads',
+          id: "threads",
+          path: "threads",
           element: <Threads />,
           children: [
             {
-              id: 'create-thread',
-              path: 'create',
+              id: "create-thread",
+              path: "create",
               element: <CreateThread />,
             },
             {
-              id: 'edit-thread',
-              path: ':threadId/edit',
+              id: "edit-thread",
+              path: ":threadId/edit",
               element: <EditThread />,
             },
             {
-              id: 'all-threads',
+              id: "all-threads",
               index: true,
               element: <AllThreads />,
             },
             {
-              id: 'one-thread',
-              path: ':threadId',
+              id: "one-thread",
+              path: ":threadId/:title",
               element: <OneThread />,
             },
           ],
         },
+        {
+          id: "one-comment",
+          path: "comments/:commentId",
+          element: <Comments />,
+        },
+        {
+          id: "one-reply",
+          path: "replies/:replyId",
+          element: <Replies />,
+        },
       ],
     },
     {
-      id: 'not-found',
-      path: '*',
+      id: "not-found",
+      path: "*",
       element: <NotFound />,
     },
   ],

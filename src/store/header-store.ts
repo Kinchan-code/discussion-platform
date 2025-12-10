@@ -1,5 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import localforage from "@/lib/localforage";
 
 /**
  * HeaderStore
@@ -27,14 +28,15 @@ export const useHeaderStore = create<HeaderStore>()(
     (set) => {
       return {
         isOpen: false,
-        activeLink: '',
+        activeLink: "",
         setIsOpen: (isOpen: boolean) => set({ isOpen }),
         toggleOpen: () => set((state) => ({ isOpen: !state.isOpen })),
         setActiveLink: (activeLink: string) => set({ activeLink }),
       };
     },
     {
-      name: 'header-store',
+      name: "header-store",
+      storage: createJSONStorage(() => localforage),
     }
   )
 );

@@ -1,27 +1,27 @@
-import { Loader } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
+import { Loader } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
-import EditButton from '@/components/edit-button';
-import { Button } from '@/components/ui/button/button';
+import EditButton from "@/components/edit-button";
+import { Button } from "@/components/ui/button/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Form } from '@/components/ui/form';
-import { FormTextArea } from '@/components/ui/form-textarea';
-import { StarRating } from '@/components/ui/star-rating';
-import { useEditReview } from '@/features/protocols/pages/one-protocol/api/edit-review';
+} from "@/components/ui/dialog";
+import { Form } from "@/components/ui/form";
+import { FormTextArea } from "@/components/ui/form-textarea";
+import { StarRating } from "@/components/ui/star-rating";
+import { useEditReview } from "@/api/reviews/edit-review";
 import {
   createReviewSchema,
   type CreateReviewSchemaType,
-} from '@/features/protocols/pages/one-protocol/schema/create-review-schema';
-import { useReviewStore } from '@/store/review-store';
-import { zodResolver } from '@hookform/resolvers/zod';
+} from "@/features/protocols/pages/one-protocol/schema/create-review-schema";
+import { useReviewStore } from "@/store/review-store";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface EditReviewProps {
   setOpen: () => void;
@@ -60,7 +60,7 @@ function EditReview({ setOpen }: EditReviewProps) {
   );
 
   const { mutateAsync, isPending } = useEditReview(
-    selectedReview?.id?.toString() ?? '',
+    selectedReview?.id?.toString() ?? "",
     () => {
       setSelectedRating(0);
       form.reset();
@@ -71,34 +71,34 @@ function EditReview({ setOpen }: EditReviewProps) {
     resolver: zodResolver(createReviewSchema),
     defaultValues: {
       rating: selectedReview?.rating ?? 0,
-      feedback: selectedReview?.feedback ?? '',
+      feedback: selectedReview?.feedback ?? "",
     },
   });
 
   // Update form values when selectedReview changes
   useEffect(() => {
     if (selectedReview) {
-      form.setValue('rating', selectedReview.rating);
-      form.setValue('feedback', selectedReview.feedback ?? '');
+      form.setValue("rating", selectedReview.rating);
+      form.setValue("feedback", selectedReview.feedback ?? "");
       setSelectedRating(selectedReview.rating);
     }
   }, [selectedReview, form]);
 
   const handleRatingChange = (rating: number) => {
     setSelectedRating(rating);
-    form.setValue('rating', rating);
-    form.trigger('rating'); // Trigger validation for the rating field
+    form.setValue("rating", rating);
+    form.trigger("rating"); // Trigger validation for the rating field
   };
 
   const handleSubmit = async (values: CreateReviewSchemaType) => {
     try {
       await toast.promise(mutateAsync({ body: values }), {
-        success: 'Review edited successfully!',
-        loading: 'Editing review...',
-        error: 'Failed to edit review.',
+        success: "Review edited successfully!",
+        loading: "Editing review...",
+        error: "Failed to edit review.",
       });
     } catch (error) {
-      console.error('Error editing review:', error);
+      console.error("Error editing review:", error);
     }
   };
 
@@ -108,12 +108,9 @@ function EditReview({ setOpen }: EditReviewProps) {
   };
 
   return (
-    <Dialog
-      open={isOpenEdit}
-      onOpenChange={setOpenEdit}
-    >
+    <Dialog open={isOpenEdit} onOpenChange={setOpenEdit}>
       <EditButton onClick={setOpen} />
-      <DialogContent className='sm:max-w-[425px]'>
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Edit Review</DialogTitle>
           <DialogDescription>
@@ -124,47 +121,47 @@ function EditReview({ setOpen }: EditReviewProps) {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
-            className='flex flex-col gap-4'
+            className="flex flex-col gap-4"
           >
-            <section className='flex flex-col gap-2 items-center'>
+            <section className="flex flex-col gap-2 items-center">
               <StarRating
                 value={selectedRating}
                 onChange={handleRatingChange}
-                size='md'
+                size="md"
                 showLabel={true}
               />
               {form.formState.errors.rating && (
-                <p className='text-red-500 text-xs'>
+                <p className="text-red-500 text-xs">
                   {form.formState.errors.rating.message}
                 </p>
               )}
             </section>
             <FormTextArea
-              placeholder='Write your feedback here...'
-              {...form.register('feedback')}
+              placeholder="Write your feedback here..."
+              {...form.register("feedback")}
             />
 
-            <section className='flex justify-end gap-2'>
+            <section className="flex justify-end gap-2">
               <Button
-                type='button'
-                variant='outline'
+                type="button"
+                variant="outline"
                 onClick={handleCancel}
-                className='text-xs md:text-sm'
+                className="text-xs md:text-sm"
               >
                 Cancel
               </Button>
               <Button
-                type='submit'
-                className='text-xs md:text-sm'
+                type="submit"
+                className="text-xs md:text-sm"
                 disabled={isPending} // Disable button while review is being created
               >
                 {isPending ? (
-                  <div className='flex items-center gap-2'>
-                    <Loader className='animate-spin size-3 md:size-4' />
+                  <div className="flex items-center gap-2">
+                    <Loader className="animate-spin size-3 md:size-4" />
                     Editing...
                   </div>
                 ) : (
-                  'Edit Review'
+                  "Edit Review"
                 )}
               </Button>
             </section>

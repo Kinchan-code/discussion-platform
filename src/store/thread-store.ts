@@ -1,5 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import localforage from "@/lib/localforage";
 
 /**
  * ThreadStore
@@ -26,7 +27,8 @@ export const useThreadStore = create<ThreadStore>()(
       setSelectedThread: (title) => set({ selectedThreadTitle: title }),
     }),
     {
-      name: 'thread-storage', // Name of the storage key
+      name: "thread-storage", // Name of the storage key
+      storage: createJSONStorage(() => localforage),
     }
   )
 );

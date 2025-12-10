@@ -1,12 +1,12 @@
-import { Skeleton } from '@/components/ui/skeleton';
-import { useGetFeaturedProtocols } from '@/features/home/api/featured-protocols';
-import { useGetTrending } from '@/features/home/api/trending';
-import { Analytics } from '@/features/home/components/analytics';
-import { Banner } from '@/features/home/components/banner';
-import { DashboardFilters } from '@/features/home/components/dashboard-filters';
-import { ProtocolCard } from '@/features/home/components/protocol-card';
-import { SkeletonCard } from '@/features/home/components/skeleton-card';
-import { TrendingDiscussionsCard } from '@/features/home/components/trending-discussions-card';
+import { Skeleton } from "@/components/ui/skeleton";
+import { useGetFeaturedProtocols } from "@/api/protocols/featured-protocols";
+import { useGetTrending } from "@/api/home/trending";
+import { Analytics } from "@/features/home/components/analytics";
+import { Banner } from "@/features/home/components/banner";
+import { DashboardFilters } from "@/features/home/components/dashboard-filters";
+import { ProtocolCard } from "@/features/home/components/protocol-card";
+import { SkeletonCard } from "@/features/home/components/skeleton-card";
+import { TrendingDiscussionsCard } from "@/features/home/components/trending-discussions-card";
 
 /**
  * Dashboard Component
@@ -32,52 +32,46 @@ function Dashboard() {
     useGetFeaturedProtocols();
 
   return (
-    <main className='flex flex-col gap-8'>
-      <section id='banners'>
+    <main className="flex flex-col gap-8">
+      <section id="banners">
         <Banner />
       </section>
-      <section id='statistics'>
+      <section id="statistics">
         <Analytics />
       </section>
-      <section id='filters'>
+      <section id="filters">
         <DashboardFilters />
       </section>
-      <section
-        id='protocols'
-        className='flex flex-col gap-4'
-      >
-        <h2 className='text-base md:text-lg lg:text-xl font-bold'>
+      <section id="protocols" className="flex flex-col gap-4">
+        <h2 className="text-base md:text-lg lg:text-xl font-bold">
           Featured Protocols
         </h2>
-        <div className='w-full flex flex-col h-full md:flex-row gap-4'>
-          <div className='w-full md:w-6/8'>
+        <div className="w-full flex flex-col h-full md:flex-row gap-4">
+          <div className="w-full md:w-6/8">
             {isFeaturedProtocolsLoading ? (
-              <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 '>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 ">
                 {Array.from({ length: 6 }).map((_, index) => (
-                  <div
-                    className='flex flex-col space-y-3 w-full'
-                    key={index}
-                  >
-                    <Skeleton className='h-36 w-full rounded-xl' />
-                    <div className='space-y-2'>
-                      <Skeleton className='h-4 w-full' />
-                      <Skeleton className='h-4 w-full' />
+                  <div className="flex flex-col space-y-3 w-full" key={index}>
+                    <Skeleton className="h-36 w-full rounded-xl" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-4 w-full" />
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 '>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 ">
                 <ProtocolCard
                   protocol={featuredProtocols?.data || []}
-                  height='full'
+                  height="full"
                 />
               </div>
             )}
           </div>
-          <div className='w-full md:w-2/8 min-h-60'>
+          <div className="w-full md:w-2/8 min-h-60">
             {isTrendingLoading ? (
-              <div className='grid grid-cols-1 gap-4 w-full'>
+              <div className="grid grid-cols-1 gap-4 w-full">
                 {Array.from({ length: 3 }).map((_, index) => (
                   <SkeletonCard key={index} />
                 ))}

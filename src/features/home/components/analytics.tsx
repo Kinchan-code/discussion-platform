@@ -1,7 +1,7 @@
-import { FileText, MessageSquare, Star, Users } from 'lucide-react';
+import { FileText, MessageSquare, Star, Users } from "lucide-react";
 
-import { Card } from '@/components/ui/card';
-import { useGetAnalytics } from '@/features/home/api/analytics';
+import { Card } from "@/components/ui/card";
+import { useGetAnalytics } from "@/api/home/analytics";
 
 /**
  * StatsCard Component
@@ -34,15 +34,15 @@ interface StatsCardProps {
 
 function StatsCard({ icon, stats, statName }: StatsCardProps) {
   return (
-    <Card className='rounded-md cursor-pointer'>
-      <main className='flex flex-col items-center justify-center gap-2 p-2 px-6'>
-        <section id='stat-icon'>{icon}</section>
-        <section id='stat-number'>
-          <p className='font-bold text-lg md:text-xl'>{stats}</p>
+    <Card className="rounded-md cursor-pointer">
+      <main className="flex flex-col items-center justify-center gap-2 p-2 px-6">
+        <section id="stat-icon">{icon}</section>
+        <section id="stat-number">
+          <p className="font-bold text-lg md:text-xl">{stats}</p>
         </section>
         <section
-          id='stat-name'
-          className='text-sm text-center md:text-base text-muted-foreground'
+          id="stat-name"
+          className="text-sm text-center md:text-base text-muted-foreground"
         >
           {statName}
         </section>
@@ -56,29 +56,29 @@ function Analytics() {
 
   const stats: StatsCardProps[] = [
     {
-      icon: <FileText className='size-5 md:size-6 text-blue-500' />,
+      icon: <FileText className="size-5 md:size-6 text-blue-500" />,
       stats: analytics?.data.active_protocols ?? 0,
-      statName: 'Active Protocols',
+      statName: "Active Protocols",
     },
     {
-      icon: <Users className='size-5 md:size-6 text-green-500' />,
+      icon: <Users className="size-5 md:size-6 text-green-500" />,
       stats: analytics?.data.community_members ?? 0,
-      statName: 'Community Members',
+      statName: "Community Members",
     },
     {
-      icon: <MessageSquare className='size-5 md:size-6 text-violet-500' />,
+      icon: <MessageSquare className="size-5 md:size-6 text-violet-500" />,
       stats: analytics?.data.discussions ?? 0,
-      statName: 'Discussions',
+      statName: "Discussions",
     },
     {
-      icon: <Star className='size-5 md:size-6 text-yellow-500' />,
+      icon: <Star className="size-5 md:size-6 text-yellow-500" />,
       stats: analytics?.data.avg_rating ?? 0,
-      statName: 'Avg. Rating',
+      statName: "Avg. Rating",
     },
   ];
 
   return (
-    <main className='grid grid-cols-2 lg:grid-cols-4 gap-4'>
+    <main className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {stats.map((stat, index) => (
         <StatsCard
           key={index}

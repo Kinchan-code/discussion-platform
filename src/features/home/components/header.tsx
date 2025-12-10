@@ -1,21 +1,21 @@
-import { LogOut, Menu, User, X } from 'lucide-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
+import { LogOut, Menu, User, X } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
-import { Button } from '@/components/ui/button/button';
-import { Separator } from '@/components/ui/separator';
-import { Create } from '@/features/home/components/create';
+import { Button } from "@/components/ui/button/button";
+import { Separator } from "@/components/ui/separator";
+import { Create } from "@/features/home/components/create";
 import {
   type LinksType,
   Navigation,
-} from '@/features/home/components/navigation';
-import { ProfileMenu } from '@/features/home/components/profile-menu';
-import { Search } from '@/features/home/components/search';
-import { useLogout } from '@/features/login/api/logout';
-import { useProtectedAction } from '@/hooks/use-protected-action';
-import { cn } from '@/lib/utils';
-import { PathName } from '@/models/path-enums';
-import { useHeaderStore } from '@/store/header-store';
+} from "@/features/home/components/navigation";
+import { ProfileMenu } from "@/features/home/components/profile-menu";
+import { Search } from "@/features/home/components/search";
+import { useLogout } from "@/api/auth/logout";
+import { useProtectedAction } from "@/hooks/use-protected-action";
+import { cn } from "@/lib/utils";
+import { PathName } from "@/enums/path-enums";
+import { useHeaderStore } from "@/store/header-store";
 
 /**
  * Header Component
@@ -44,8 +44,8 @@ import { useHeaderStore } from '@/store/header-store';
  */
 
 const links: LinksType[] = [
-  { label: 'Protocols', to: PathName.PROTOCOLS },
-  { label: 'Discussions', to: PathName.THREADS },
+  { label: "Protocols", to: PathName.PROTOCOLS },
+  { label: "Discussions", to: PathName.THREADS },
 ];
 
 function Header() {
@@ -73,12 +73,12 @@ function Header() {
   const handleLogout = async () => {
     try {
       toast.promise(logout(), {
-        loading: 'Logging out...',
-        success: 'Logged out successfully',
-        error: 'Logout failed',
+        loading: "Logging out...",
+        success: "Logged out successfully",
+        error: "Logout failed",
       });
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     }
   };
 
@@ -87,63 +87,51 @@ function Header() {
   };
 
   return (
-    <main className='flex flex-col p-4 h-full justify-center max-w-7xl mx-auto w-full gap-4 '>
+    <main className="flex flex-col p-4 h-full justify-center max-w-7xl mx-auto w-full gap-4 ">
       <section
-        id='web-view'
-        className='flex items-center justify-between gap-4'
+        id="web-view"
+        className="flex items-center justify-between gap-4"
       >
         <div
-          id='app-name'
-          className='cursor-pointer'
+          id="app-name"
+          className="cursor-pointer"
           onClick={handleNavigateToHome}
         >
-          <h1 className='text-lg md:text-xl lg:text-2xl font-bold'>
+          <h1 className="text-lg md:text-xl lg:text-2xl font-bold">
             Protocol Hub
           </h1>
         </div>
         {!dashboard && (
-          <div
-            id='web-search-input'
-            className='hidden lg:block'
-          >
+          <div id="web-search-input" className="hidden lg:block">
             <Search />
           </div>
         )}
 
-        <div
-          id='user-actions'
-          className='hidden lg:flex items-center gap-4'
-        >
+        <div id="user-actions" className="hidden lg:flex items-center gap-4">
           <Navigation links={links} />
           {isAuthenticated ? (
             <ProfileMenu />
           ) : (
-            <Button
-              variant='outline'
-              onClick={handleSignIn}
-            >
+            <Button variant="outline" onClick={handleSignIn}>
               Sign in
             </Button>
           )}
 
           <Create />
         </div>
-        <div
-          id='mobile-actions'
-          className='lg:hidden'
-        >
-          <div className='relative w-4 h-4'>
+        <div id="mobile-actions" className="lg:hidden">
+          <div className="relative w-4 h-4">
             <X
               className={cn(
-                'size-4 absolute inset-0 transition-all duration-200',
-                isOpen ? 'opacity-100 rotate-0' : 'opacity-0 -rotate-90'
+                "size-4 absolute inset-0 transition-all duration-200",
+                isOpen ? "opacity-100 rotate-0" : "opacity-0 -rotate-90"
               )}
               onClick={handleToggleMobileActions}
             />
             <Menu
               className={cn(
-                'size-4 absolute inset-0 transition-all duration-200',
-                isOpen ? 'opacity-0 rotate-90' : 'opacity-100 rotate-0'
+                "size-4 absolute inset-0 transition-all duration-200",
+                isOpen ? "opacity-0 rotate-90" : "opacity-100 rotate-0"
               )}
               onClick={handleToggleMobileActions}
             />
@@ -151,42 +139,36 @@ function Header() {
         </div>
       </section>
       {isOpen && (
-        <section id='mobile-actions'>
-          <Separator className='mb-4' />
-          <div className='flex flex-col gap-4'>
+        <section id="mobile-actions">
+          <Separator className="mb-4" />
+          <div className="flex flex-col gap-4">
             {!dashboard && <Search />}
-            <div className='px-2'>
-              <Navigation
-                links={links}
-                mobile
-              />
+            <div className="px-2">
+              <Navigation links={links} mobile />
             </div>
             <Separator />
             {isAuthenticated ? (
-              <div
-                id='links-buttons'
-                className='flex flex-col gap-2'
-              >
+              <div id="links-buttons" className="flex flex-col gap-2">
                 <Link
                   to={PathName.USER_PROTOCOLS}
-                  className='flex items-center gap-2 text-gray-700 text-sm md:text-base'
+                  className="flex items-center gap-2 text-gray-700 text-sm md:text-base"
                   onClick={handleClickLinks}
                 >
-                  <User className='size-4' /> Profile
+                  <User className="size-4" /> Profile
                 </Link>
                 <Link
                   to={PathName.HOMEPAGE}
-                  className='flex items-center gap-2 text-gray-700 text-sm md:text-base'
+                  className="flex items-center gap-2 text-gray-700 text-sm md:text-base"
                   onClick={handleLogout}
                 >
-                  <LogOut className='size-4' /> Logout
+                  <LogOut className="size-4" /> Logout
                 </Link>
               </div>
             ) : (
               <Button
-                variant='outline'
+                variant="outline"
                 onClick={handleSignIn}
-                className='w-full'
+                className="w-full"
               >
                 Sign in
               </Button>

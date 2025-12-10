@@ -1,9 +1,9 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
 
-import api from '@/api/axios-instance';
-
-import type { User } from '@/models/login';
+import { persist, createJSONStorage } from "zustand/middleware";
+import api from "@/api/axios-instance";
+import localforage from "@/lib/localforage";
+import type { User } from "@/types/login";
 
 /**
  * AuthStore
@@ -64,7 +64,7 @@ export const useAuthStore = create<AuthStore>()(
         set({ isAuthenticated: authenticated });
         // Also update localStorage directly for immediate persistence
         if (!authenticated) {
-          localStorage.removeItem('token');
+          localStorage.removeItem("token");
         }
       },
       setLoading: (loading) => set({ isLoading: loading }),
@@ -73,9 +73,9 @@ export const useAuthStore = create<AuthStore>()(
         set({ token });
         // Also store in localStorage directly for immediate persistence
         if (token) {
-          localStorage.setItem('token', token);
+          localStorage.setItem("token", token);
         } else {
-          localStorage.removeItem('token');
+          localStorage.removeItem("token");
         }
       },
       setRedirectPath: (path) => set({ redirectPath: path }),
@@ -83,7 +83,7 @@ export const useAuthStore = create<AuthStore>()(
       // Auth methods
       login: (token, user) => {
         // Store token in localStorage immediately
-        localStorage.setItem('token', token);
+        localStorage.setItem("token", token);
         set({
           isAuthenticated: true,
           token,
@@ -94,7 +94,7 @@ export const useAuthStore = create<AuthStore>()(
 
       logout: () => {
         // Remove token from localStorage immediately
-        localStorage.removeItem('token');
+        localStorage.removeItem("token");
         set({
           isAuthenticated: false,
           token: null,
@@ -108,7 +108,7 @@ export const useAuthStore = create<AuthStore>()(
 
         try {
           // First check localStorage directly for token
-          const storedToken = localStorage.getItem('token');
+          const storedToken = localStorage.getItem("token");
           const currentToken = get().token;
           const token = storedToken || currentToken;
 
@@ -124,7 +124,7 @@ export const useAuthStore = create<AuthStore>()(
           }
 
           // Call profile API to validate token
-          const response = await api.get('/profile');
+          const response = await api.get("/profile");
 
           if (response.data.status_code === 200) {
             // Token is valid, user is authenticated
@@ -135,7 +135,7 @@ export const useAuthStore = create<AuthStore>()(
             logout();
           }
         } catch (error) {
-          console.error('Auth check failed:', error);
+          console.error("Auth check failed:", error);
           logout();
         } finally {
           setLoading(false);
@@ -158,7 +158,7 @@ export const useAuthStore = create<AuthStore>()(
 
       debugTokenStatus: () => {
         const storeToken = get().token;
-        const localStorageToken = localStorage.getItem('token');
+        const localStorageToken = localStorage.getItem("token");
         return {
           storeToken,
           localStorageToken,
@@ -167,7 +167,7 @@ export const useAuthStore = create<AuthStore>()(
       },
     }),
     {
-      name: 'auth-storage',
+      name: "auth-storage",
       // Persist all important auth data
       partialize: (state) => ({
         isAuthenticated: state.isAuthenticated,
@@ -176,31 +176,7 @@ export const useAuthStore = create<AuthStore>()(
         redirectPath: state.redirectPath,
       }),
       // Custom storage implementation to ensure token is always in sync
-      storage: {
-        getItem: (name) => {
-          const value = localStorage.getItem(name);
-          if (value) {
-            try {
-              const parsed = JSON.parse(value);
-              // Ensure token is in sync with localStorage
-              const directToken = localStorage.getItem('token');
-              if (directToken && parsed.state.token !== directToken) {
-                parsed.state.token = directToken;
-              }
-              return parsed;
-            } catch {
-              return null;
-            }
-          }
-          return null;
-        },
-        setItem: (name, value) => {
-          localStorage.setItem(name, JSON.stringify(value));
-        },
-        removeItem: (name) => {
-          localStorage.removeItem(name);
-        },
-      },
+      storage: createJSONStorage(() => localforage),
     }
   )
 );

@@ -1,6 +1,7 @@
-import { updateUrlParam } from '@/lib/utils';
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { updateUrlParam } from "@/lib/utils";
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import localforage from "@/lib/localforage";
 
 /**
  * SearchDialogStore
@@ -24,7 +25,7 @@ interface SearchDialogStore {
   clearSearchQuery: () => void;
 }
 
-const PARAM_NAME = 'q';
+const PARAM_NAME = "q";
 
 export const useSearchDialogStore = create<SearchDialogStore>()(
   persist(
@@ -35,7 +36,7 @@ export const useSearchDialogStore = create<SearchDialogStore>()(
 
       return {
         isOpen: false,
-        searchQuery: searchParams.get(PARAM_NAME) || '',
+        searchQuery: searchParams.get(PARAM_NAME) || "",
         setIsOpen: (isOpen: boolean) => {
           set({ isOpen });
 
@@ -46,11 +47,12 @@ export const useSearchDialogStore = create<SearchDialogStore>()(
         },
         setSearchQuery: (searchQuery: string) => set({ searchQuery }),
         toggleOpen: () => set((state) => ({ isOpen: !state.isOpen })),
-        clearSearchQuery: () => set({ searchQuery: '' }),
+        clearSearchQuery: () => set({ searchQuery: "" }),
       };
     },
     {
-      name: 'search-dialog-store',
+      name: "search-dialog-store",
+      storage: createJSONStorage(() => localforage),
     }
   )
 );

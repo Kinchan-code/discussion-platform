@@ -1,5 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import localforage from "@/lib/localforage";
 
 /**
  * VoteThreadStore
@@ -15,9 +16,9 @@ import { persist } from 'zustand/middleware';
  */
 
 export interface VoteThreadStore {
-  vote: Record<number, 'upvote' | 'downvote' | null>; // threadId -> vote status
-  setVote: (threadId: number, vote: 'upvote' | 'downvote' | null) => void;
-  getVote: (threadId: number) => 'upvote' | 'downvote' | null;
+  vote: Record<number, "upvote" | "downvote" | null>; // threadId -> vote status
+  setVote: (threadId: number, vote: "upvote" | "downvote" | null) => void;
+  getVote: (threadId: number) => "upvote" | "downvote" | null;
   hasUpvoted: (threadId: number) => boolean;
   hasDownvoted: (threadId: number) => boolean;
 }
@@ -31,11 +32,12 @@ export const useVoteThreadStore = create<VoteThreadStore>()(
           vote: { ...state.vote, [threadId]: vote },
         })),
       getVote: (threadId) => get().vote[threadId] || null,
-      hasUpvoted: (threadId) => get().vote[threadId] === 'upvote',
-      hasDownvoted: (threadId) => get().vote[threadId] === 'downvote',
+      hasUpvoted: (threadId) => get().vote[threadId] === "upvote",
+      hasDownvoted: (threadId) => get().vote[threadId] === "downvote",
     }),
     {
-      name: 'vote-thread-storage',
+      name: "vote-thread-storage",
+      storage: createJSONStorage(() => localforage),
     }
   )
 );
