@@ -1,5 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import localforage from "@/lib/localforage";
 
 /**
  * VoteCommentStore
@@ -15,9 +16,9 @@ import { persist } from 'zustand/middleware';
  */
 
 export interface VoteCommentStore {
-  votes: Record<number, 'upvote' | 'downvote' | null>; // commentId -> vote status
-  setVote: (commentId: number, vote: 'upvote' | 'downvote' | null) => void;
-  getVote: (commentId: number) => 'upvote' | 'downvote' | null;
+  votes: Record<number, "upvote" | "downvote" | null>; // commentId -> vote status
+  setVote: (commentId: number, vote: "upvote" | "downvote" | null) => void;
+  getVote: (commentId: number) => "upvote" | "downvote" | null;
   hasUpvoted: (commentId: number) => boolean;
   hasDownvoted: (commentId: number) => boolean;
 }
@@ -31,11 +32,12 @@ export const useVoteCommentStore = create<VoteCommentStore>()(
           votes: { ...state.votes, [commentId]: vote },
         })),
       getVote: (commentId) => get().votes[commentId] || null,
-      hasUpvoted: (commentId) => get().votes[commentId] === 'upvote',
-      hasDownvoted: (commentId) => get().votes[commentId] === 'downvote',
+      hasUpvoted: (commentId) => get().votes[commentId] === "upvote",
+      hasDownvoted: (commentId) => get().votes[commentId] === "downvote",
     }),
     {
-      name: 'vote-comment-storage', // Name of the storage key
+      name: "vote-comment-storage", // Name of the storage key
+      storage: createJSONStorage(() => localforage),
     }
   )
 );

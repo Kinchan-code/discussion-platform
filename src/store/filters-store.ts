@@ -1,5 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import localforage from "@/lib/localforage";
 
 /**
  * FiltersStore
@@ -29,7 +30,8 @@ export const useFiltersStore = create<FiltersStore>()(
         set((state) => ({ isOpenFilter: !state.isOpenFilter })),
     }),
     {
-      name: 'filters-storage',
+      name: "filters-storage",
+      storage: createJSONStorage(() => localforage),
     }
   )
 );

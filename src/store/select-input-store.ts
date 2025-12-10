@@ -1,5 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import localforage from "@/lib/localforage";
 
 /**
  * SelectInputStore
@@ -24,13 +25,14 @@ interface SelectInputStore {
 export const useSelectInputStore = create<SelectInputStore>()(
   persist(
     (set) => ({
-      sortBy: '',
-      type: '',
+      sortBy: "",
+      type: "",
       setSortBy: (sortBy: string) => set({ sortBy }),
       setType: (type: string) => set({ type }),
     }),
     {
-      name: 'select-input-store',
+      name: "select-input-store",
+      storage: createJSONStorage(() => localforage),
     }
   )
 );

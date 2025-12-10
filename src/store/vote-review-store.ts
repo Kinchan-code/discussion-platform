@@ -1,5 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import localforage from "@/lib/localforage";
 
 /**
  * VoteReviewStore
@@ -15,9 +16,9 @@ import { persist } from 'zustand/middleware';
  */
 
 export interface VoteReviewStore {
-  votes: Record<number, 'helpful' | 'not_helpful' | null>; // reviewId -> vote status
-  setVote: (reviewId: number, vote: 'helpful' | 'not_helpful' | null) => void;
-  getVote: (reviewId: number) => 'helpful' | 'not_helpful' | null;
+  votes: Record<number, "helpful" | "not_helpful" | null>; // reviewId -> vote status
+  setVote: (reviewId: number, vote: "helpful" | "not_helpful" | null) => void;
+  getVote: (reviewId: number) => "helpful" | "not_helpful" | null;
   hasUpvoted: (reviewId: number) => boolean;
 }
 
@@ -30,10 +31,11 @@ export const useVoteReviewStore = create<VoteReviewStore>()(
           votes: { ...state.votes, [reviewId]: vote },
         })),
       getVote: (reviewId) => get().votes[reviewId] || null,
-      hasUpvoted: (reviewId) => get().votes[reviewId] === 'helpful',
+      hasUpvoted: (reviewId) => get().votes[reviewId] === "helpful",
     }),
     {
-      name: 'vote-review-storage', // Name of the storage key
+      name: "vote-review-storage", // Name of the storage key
+      storage: createJSONStorage(() => localforage),
     }
   )
 );

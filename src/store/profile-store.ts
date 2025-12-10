@@ -1,5 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import localforage from "@/lib/localforage";
 
 /**
  * ProfileStore
@@ -26,7 +27,8 @@ export const useProfileStore = create<ProfileStore>()(
       setOpen: (open) => set({ isOpen: open }),
     }),
     {
-      name: 'profile-modal-storage', // Name of the storage key
+      name: "profile-modal-storage",
+      storage: createJSONStorage(() => localforage),
     }
   )
 );

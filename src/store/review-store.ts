@@ -1,11 +1,12 @@
-import type { Reviews } from '@/models/reviews';
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import type { Reviews } from "@/types/reviews";
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import localforage from "@/lib/localforage";
 
 /**
  * ReviewStore
  * @description This store manages the state of reviews, including opening and editing review modals,
- * highlighting reviews, and selecting a review for editing.
+ * and selecting a review for editing.
  *
  * components used:
  * - Zustand: For state management.
@@ -22,8 +23,6 @@ interface ReviewStore {
   isOpenEdit: boolean;
   setOpenEdit: (open: boolean) => void;
   selectedReview: Reviews | null;
-  highlightReview: string | null;
-  setHighlightReview: (reviewId: string | null) => void;
   setSelectedReview: (review: Reviews | null) => void;
 }
 
@@ -32,18 +31,16 @@ export const useReviewStore = create<ReviewStore>()(
     (set) => ({
       isOpen: false,
       isOpenEdit: false,
-      highlightReview: null,
-      selectedReviewId: null,
       selectedReview: null,
 
       setOpen: (open) => set({ isOpen: open }),
       setOpenEdit: (open) => set({ isOpenEdit: open }),
-      setHighlightReview: (reviewId) => set({ highlightReview: reviewId }),
       setSelectedReview: (review: Reviews | null) =>
         set({ selectedReview: review }),
     }),
     {
-      name: 'review-store',
+      name: "review-store",
+      storage: createJSONStorage(() => localforage),
     }
   )
 );

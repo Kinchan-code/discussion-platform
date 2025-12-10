@@ -1,8 +1,8 @@
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from "react-router-dom";
 
-import { Badge } from '@/components/ui/badge/badge';
-import { useGetPopularTags } from '@/features/home/api/popular-tags';
-import { useSearchDialogStore } from '@/store/search-dialog-store';
+import { Badge } from "@/components/ui/badge/badge";
+import { useGetPopularTags } from "@/api/home/popular-tags";
+import { useSearchDialogStore } from "@/store/search-dialog-store";
 
 /**
  * PopularTags Component
@@ -29,31 +29,31 @@ function PopularTags() {
 
   const handleTagClick = (tag: string) => {
     if (!tag) {
-      params.delete('q');
+      params.delete("q");
       setParams(params);
       setIsOpen(false);
     } else {
-      params.set('q', tag);
+      params.set("q", tag);
       setParams(params);
       setIsOpen(true);
     }
   };
 
   return (
-    <main className='flex flex-col items-center justify-center gap-2 cursor-pointer '>
+    <main className="flex flex-col items-center justify-center gap-2 cursor-pointer ">
       {isLoading ? (
-        <div className='flex flex-wrap gap-2 '>
-          <p className='text-muted-foreground text-xs animate-pulse'>
+        <div className="flex flex-wrap gap-2 ">
+          <p className="text-muted-foreground text-xs animate-pulse">
             loading popular tags...
           </p>
         </div>
       ) : (
-        <div className='flex flex-wrap gap-2'>
+        <div className="flex flex-wrap gap-2">
           {popularTags?.data.map((tag) => (
             <Badge
               key={tag.id}
-              variant='outline'
-              className='rounded-xl hover:bg-blue-500 hover:text-white'
+              variant="outline"
+              className="rounded-xl hover:bg-blue-500 hover:text-white"
               onClick={() => handleTagClick(tag.tag)}
             >
               {tag.tag}

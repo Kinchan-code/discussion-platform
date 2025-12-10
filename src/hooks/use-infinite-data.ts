@@ -1,7 +1,7 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from "@tanstack/react-query";
 
-import type { Response } from '@/models/response';
-import type { Pagination } from '@/models/pagination';
+import type { Response } from "@/types/response";
+import type { Pagination } from "@/types/pagination";
 
 /**
  * Custom hook to fetch paginated data using React Query's infinite query.

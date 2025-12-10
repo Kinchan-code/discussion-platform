@@ -1,8 +1,8 @@
-import { User } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'sonner';
+import { User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
-import { Button } from '@/components/ui/button/button';
+import { Button } from "@/components/ui/button/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,9 +11,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { useLogout } from '@/features/login/api/logout';
-import { PathName } from '@/models/path-enums';
+} from "@/components/ui/dropdown-menu";
+import { useLogout } from "@/api/auth/logout";
+import { PathName } from "@/enums/path-enums";
 
 /**
  * Dropdown Menu Component
@@ -56,41 +56,32 @@ function ProfileMenu() {
 
   const handleLogout = () => {
     toast.promise(logout(), {
-      loading: 'Logging out...',
-      success: 'Logged out successfully!',
-      error: 'Logout failed. Please try again.',
+      loading: "Logging out...",
+      success: "Logged out successfully!",
+      error: "Logout failed. Please try again.",
     });
     // Note: Navigation is handled by the useLogout hook
   };
 
   const dropDownMenu: DropDownMenuType[] = [
-    { label: 'Profile', shortcut: 'shift + p', onClick: handleProfileClick },
-    { label: 'Logout', shortcut: 'shift + l', onClick: handleLogout },
+    { label: "Profile", shortcut: "shift + p", onClick: handleProfileClick },
+    { label: "Logout", shortcut: "shift + l", onClick: handleLogout },
   ];
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant='ghost'
-          size='icon'
-        >
-          <User className='w-5 h-5' />
+        <Button variant="ghost" size="icon">
+          <User className="w-5 h-5" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className='w-56'
-        align='center'
-      >
+      <DropdownMenuContent className="w-56" align="center">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuGroup>
           {dropDownMenu.map((item) => (
-            <DropdownMenuItem
-              key={item.label}
-              onClick={item.onClick}
-            >
+            <DropdownMenuItem key={item.label} onClick={item.onClick}>
               {item.label}
-              <DropdownMenuShortcut className='text-xs'>
+              <DropdownMenuShortcut className="text-xs">
                 {item.shortcut}
               </DropdownMenuShortcut>
             </DropdownMenuItem>

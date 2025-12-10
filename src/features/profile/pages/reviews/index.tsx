@@ -1,11 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-import ReviewCard from '@/components/review-card';
-import { LoadMoreButton } from '@/components/ui/load-more-button';
-import { Skeleton } from '@/components/ui/skeleton';
-import { useReviewStore } from '@/store/review-store';
+import ReviewCard from "@/components/review-card";
+import { slugify } from "@/lib/utils";
+import { LoadMoreButton } from "@/components/ui/load-more-button";
+import { Skeleton } from "@/components/ui/skeleton";
 
-import { useGetUserReviewsInfinite } from '@/features/profile/pages/reviews/api/user-reviews';
+import { useGetUserReviewsInfinite } from "@/api/profile/user-reviews";
 
 /**
  * Reviews Component
@@ -23,7 +23,6 @@ import { useGetUserReviewsInfinite } from '@/features/profile/pages/reviews/api/
  * @param {boolean} props.isFetchingNextPage - Indicates if the next page of reviews is being fetched.
  * @param {function} props.fetchNextPage - Function to fetch the next page of reviews.
  * @param {Array} props.userReviews - The list of user reviews to display.
- * @param {function} props.setHighlightReview - Function to set the review to highlight.
  *
  * @returns {JSX.Element} The Reviews component.
  *
@@ -33,7 +32,6 @@ import { useGetUserReviewsInfinite } from '@/features/profile/pages/reviews/api/
 
 function Reviews() {
   const navigate = useNavigate();
-  const { setHighlightReview } = useReviewStore();
   const {
     data: userReviews,
     isLoading,
@@ -48,37 +46,34 @@ function Reviews() {
 
   const reviews = userReviews?.pages.flatMap((page) => page.data) || [];
 
-  const handleNavigate = (protocolId: string, reviewId: string) => {
-    navigate(`/protocols/${protocolId}`);
-    setHighlightReview(reviewId);
+  const handleNavigate = (protocolId: string, protocolTitle?: string) => {
+    const title = protocolTitle ? slugify(protocolTitle) : "protocol";
+    navigate(`/protocols/${protocolId}/${title}`);
   };
 
   return (
     <main>
       {isLoading ? (
-        <div className='flex flex-col space-y-3 w-full'>
-          <Skeleton className='h-36 w-full rounded-xl' />
-          <div className='space-y-2'>
-            <Skeleton className='h-4 w-full' />
-            <Skeleton className='h-4 w-full' />
+        <div className="flex flex-col space-y-3 w-full">
+          <Skeleton className="h-36 w-full rounded-xl" />
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-full" />
           </div>
         </div>
       ) : (
-        <section className='flex flex-col gap-4'>
+        <section className="flex flex-col gap-4">
           {reviews.map((review) => (
             <ReviewCard
               key={review.id}
               review={review}
               handleNavigateToReview={() =>
-                handleNavigate(
-                  review.protocol_id.toString(),
-                  review.id.toString()
-                )
+                handleNavigate(review.protocol_id.toString())
               }
             />
           ))}
           {reviews.length === 0 ? (
-            <p className='text-center text-xs md:text-sm text-muted-foreground italic'>
+            <p className="text-center text-xs md:text-sm text-muted-foreground italic">
               No reviews found. Share your feedback on protocols you have used.
             </p>
           ) : (

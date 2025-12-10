@@ -1,13 +1,14 @@
-import HelpfulVote from '@/features/protocols/pages/one-protocol/components/helpful-vote';
-import { cn } from '@/lib/utils';
-import type { Reviews } from '@/models/reviews';
-import { useAuthStore } from '@/store/auth-store';
-import { useReviewStore } from '@/store/review-store';
-import { Calendar, Star, User } from 'lucide-react';
-import DeleteButton from './delete-button';
-import { useDeleteReview } from '@/api/delete-review';
-import { toast } from 'sonner';
-import EditReview from '@/features/protocols/pages/one-protocol/components/edit-review';
+import HelpfulVote from "@/features/protocols/pages/one-protocol/components/helpful-vote";
+import { cn } from "@/lib/utils";
+import type { Reviews } from "@/types/reviews";
+import { useAuthStore } from "@/store/auth-store";
+import { useReviewStore } from "@/store/review-store";
+import { Calendar, Star, User } from "lucide-react";
+import DeleteButton from "./delete-button";
+import { useDeleteReview } from "@/api/reviews/delete-review";
+import { toast } from "sonner";
+import EditReview from "@/features/protocols/pages/one-protocol/components/edit-review";
+import { VoteType } from "@/enums/vote-type-enums";
 
 /**
  * ReviewCard Component
@@ -47,17 +48,14 @@ function ReviewCard({
   edit,
 }: ReviewCardProps) {
   const { user } = useAuthStore();
-  const { highlightReview, setSelectedReview, setOpenEdit } = useReviewStore();
+  const { setSelectedReview, setOpenEdit } = useReviewStore();
   const { mutateAsync, isPending } = useDeleteReview();
-
-  const isHighlighted = highlightReview === review.id.toString();
 
   const handleMainClick = () => {
     // If there's a navigation handler, use it
     if (handleNavigateToReview) {
       handleNavigateToReview();
     }
-    // Highlights will auto-clear after 5 seconds via timer
   };
 
   const handleEdit = () => {
@@ -65,17 +63,17 @@ function ReviewCard({
     setOpenEdit(true);
   };
 
-  const handleDeleteClick = async (e: React.MouseEvent, reviewId: number) => {
+  const handleDeleteClick = async (e: React.MouseEvent, reviewId: string) => {
     e.preventDefault();
     e.stopPropagation();
     try {
-      await toast.promise(mutateAsync(reviewId), {
-        loading: 'Deleting review...',
-        success: 'Review deleted successfully',
-        error: 'Failed to delete review',
+      await toast.promise(mutateAsync(reviewId ?? ""), {
+        loading: "Deleting review...",
+        success: "Review deleted successfully",
+        error: "Failed to delete review",
       });
     } catch (error) {
-      console.error('Failed to delete review:', error);
+      console.error("Failed to delete review:", error);
     }
   };
 
@@ -83,36 +81,31 @@ function ReviewCard({
     <main
       ref={ref}
       className={cn(
-        'border rounded-xl p-4 border-gray-200 flex flex-col gap-4 cursor-pointer',
-        !handleNavigateToReview
-          ? isHighlighted
-            ? 'bg-yellow-50 border border-yellow-200'
-            : 'bg-white'
-          : ''
+        "border rounded-xl p-4 border-gray-200 flex flex-col gap-4 cursor-pointer bg-white"
       )}
       onClick={handleMainClick}
     >
-      <section className='flex flex-col justify-between gap-2'>
-        <div className='flex items-center justify-between gap-2'>
-          <div className='flex items-center gap-2'>
-            <div className='flex'>
+      <section className="flex flex-col justify-between gap-2">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <div className="flex">
               {[1, 2, 3, 4, 5].map((star) => (
                 <Star
                   key={star}
-                  className={cn('size-3 md:size-4', {
-                    'fill-yellow-400 text-yellow-400': star <= review.rating,
-                    'text-gray-300': star > review.rating,
+                  className={cn("size-3 md:size-4", {
+                    "fill-yellow-400 text-yellow-400": star <= review.rating,
+                    "text-gray-300": star > review.rating,
                   })}
                 />
               ))}
             </div>
-            <span className='text-xs md:text-sm text-muted-foreground'>
+            <span className="text-xs md:text-sm text-muted-foreground">
               {review.rating}/5 stars
             </span>
           </div>
 
           {review.author === user?.name && (
-            <div className='flex items-center gap-2'>
+            <div className="flex items-center gap-2">
               {edit && <EditReview setOpen={handleEdit} />}
               <DeleteButton
                 loading={isPending}
@@ -121,22 +114,22 @@ function ReviewCard({
             </div>
           )}
         </div>
-        <div className='flex md:items-center flex-col md:flex-row gap-2 text-xs text-gray-600'>
-          <div className='flex items-center gap-1'>
-            <User className='w-3 h-3' />
+        <div className="flex md:items-center flex-col md:flex-row gap-2 text-xs text-gray-600">
+          <div className="flex items-center gap-1">
+            <User className="w-3 h-3" />
             <span>{review.author}</span>
           </div>
-          <div className='flex items-center gap-1'>
-            <Calendar className='w-3 h-3' />
+          <div className="flex items-center gap-1">
+            <Calendar className="w-3 h-3" />
             <span>{new Date(review.created_at).toLocaleDateString()}</span>
           </div>
         </div>
       </section>
 
       {review.feedback ? (
-        <p className='text-xs md:text-sm text-gray-700'>{review.feedback}</p>
+        <p className="text-xs md:text-sm text-gray-700">{review.feedback}</p>
       ) : (
-        <p className='text-xs italic text-muted-foreground'>
+        <p className="text-xs italic text-muted-foreground">
           No feedback provided.
         </p>
       )}
@@ -144,6 +137,7 @@ function ReviewCard({
         <HelpfulVote
           reviewId={review.id}
           voteCount={review.helpful_count}
+          isUpvoted={review.user_vote === VoteType.UPVOTE}
         />
       )}
     </main>

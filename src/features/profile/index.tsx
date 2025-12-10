@@ -1,20 +1,20 @@
-import { FileText, Mail, MessageSquare, Star, User } from 'lucide-react';
-import { useMemo } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router';
+import { FileText, Mail, MessageSquare, Star, User } from "lucide-react";
+import { useMemo } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { useGetUserStatistics } from '@/features/profile/api/user-statistics';
-import EditProfile from '@/features/profile/components/edit-profile';
-import { cn, formatDate } from '@/lib/utils';
-import { PathName } from '@/models/path-enums';
-import { useAuthStore } from '@/store/auth-store';
+} from "@/components/ui/select";
+import { useGetUserStatistics } from "@/api/profile/user-statistics";
+import EditProfile from "@/features/profile/components/edit-profile";
+import { cn, formatDate } from "@/lib/utils";
+import { PathName } from "@/enums/path-enums";
+import { useAuthStore } from "@/store/auth-store";
 
 /**
  * Options for the activity selector dropdown.
@@ -24,28 +24,28 @@ import { useAuthStore } from '@/store/auth-store';
 
 const activitiesOptions = [
   {
-    value: 'protocols',
-    label: 'Protocols',
+    value: "protocols",
+    label: "Protocols",
     icon: FileText,
   },
   {
-    value: 'threads',
-    label: 'Discussions',
+    value: "threads",
+    label: "Discussions",
     icon: MessageSquare,
   },
   {
-    value: 'comments',
-    label: 'Comments',
+    value: "comments",
+    label: "Comments",
     icon: MessageSquare,
   },
   {
-    value: 'replies',
-    label: 'Replies',
+    value: "replies",
+    label: "Replies",
     icon: MessageSquare,
   },
   {
-    value: 'reviews',
-    label: 'Reviews',
+    value: "reviews",
+    label: "Reviews",
     icon: Star,
   },
 ];
@@ -90,32 +90,32 @@ function Profile() {
 
   const statistics = [
     {
-      label: 'Protocols',
+      label: "Protocols",
       value: data?.data.total_protocols || 0,
       icon: FileText,
-      color: 'bg-blue-100',
-      textColor: 'text-blue-600',
+      color: "bg-blue-100",
+      textColor: "text-blue-600",
     },
     {
-      label: 'Discussions',
+      label: "Discussions",
       value: data?.data.total_threads || 0,
       icon: MessageSquare,
-      color: 'bg-green-100',
-      textColor: 'text-green-600',
+      color: "bg-green-100",
+      textColor: "text-green-600",
     },
     {
-      label: 'Comments',
+      label: "Comments",
       value: data?.data.total_comments || 0,
       icon: MessageSquare,
-      color: 'bg-purple-100',
-      textColor: 'text-purple-600',
+      color: "bg-purple-100",
+      textColor: "text-purple-600",
     },
     {
-      label: 'Reviews',
+      label: "Reviews",
       value: data?.data.total_reviews || 0,
       icon: Star,
-      color: 'bg-yellow-100',
-      textColor: 'text-yellow-600',
+      color: "bg-yellow-100",
+      textColor: "text-yellow-600",
     },
   ];
 
@@ -124,35 +124,35 @@ function Profile() {
     const pathname = location.pathname;
     switch (pathname) {
       case PathName.USER_PROTOCOLS:
-        return 'protocols';
+        return "protocols";
       case PathName.USER_THREADS:
-        return 'threads';
+        return "threads";
       case PathName.USER_COMMENTS:
-        return 'comments';
+        return "comments";
       case PathName.USER_REPLIES:
-        return 'replies';
+        return "replies";
       case PathName.USER_REVIEWS:
-        return 'reviews';
+        return "reviews";
       default:
-        return 'protocols'; // Default fallback
+        return "protocols"; // Default fallback
     }
   }, [location.pathname]);
 
   const handleChange = (value: string) => {
     switch (value) {
-      case 'protocols':
+      case "protocols":
         navigate(PathName.USER_PROTOCOLS);
         break;
-      case 'threads':
+      case "threads":
         navigate(PathName.USER_THREADS);
         break;
-      case 'comments':
+      case "comments":
         navigate(PathName.USER_COMMENTS);
         break;
-      case 'replies':
+      case "replies":
         navigate(PathName.USER_REPLIES);
         break;
-      case 'reviews':
+      case "reviews":
         navigate(PathName.USER_REVIEWS);
         break;
       default:
@@ -161,28 +161,28 @@ function Profile() {
     }
   };
   return (
-    <main className='flex flex-col h-full gap-8 p-4'>
+    <main className="flex flex-col h-full gap-8 p-4">
       {/* Profile Header */}
-      <section className='flex flex-col h-full lg:flex-row gap-8'>
+      <section className="flex flex-col h-full lg:flex-row gap-8">
         {/* User Info */}
-        <Card className='w-full flex-1 md:w-1/3 '>
+        <Card className="w-full flex-1 md:w-1/3 ">
           <CardContent>
-            <section className='flex flex-col gap-4 h-full justify-center'>
-              <div className='flex items-center gap-2 justify-between'>
-                <p className='text-base md:text-xl font-bold'>{user?.name}</p>
+            <section className="flex flex-col gap-4 h-full justify-center">
+              <div className="flex items-center gap-2 justify-between">
+                <p className="text-base md:text-xl font-bold">{user?.name}</p>
                 <EditProfile />
               </div>
-              <div className='flex items-center gap-2 text-muted-foreground'>
-                <Mail className='size-3 md:size-4' />
-                <span className='text-xs md:text-sm text-muted-foreground'>
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Mail className="size-3 md:size-4" />
+                <span className="text-xs md:text-sm text-muted-foreground">
                   {user?.email}
                 </span>
               </div>
-              <div className='flex items-center gap-2 text-gray-600'>
-                <User className='size-3 md:size-4' />
-                <span className='text-xs md:text-sm text-muted-foreground'>
-                  Member since{' '}
-                  {user?.created_at ? formatDate(user.created_at) : 'Unknown'}
+              <div className="flex items-center gap-2 text-gray-600">
+                <User className="size-3 md:size-4" />
+                <span className="text-xs md:text-sm text-muted-foreground">
+                  Member since{" "}
+                  {user?.created_at ? formatDate(user.created_at) : "Unknown"}
                 </span>
               </div>
             </section>
@@ -190,23 +190,23 @@ function Profile() {
         </Card>
 
         {/* Statistics */}
-        <Card className='w-full h-full md:w-2/3 '>
+        <Card className="w-full h-full md:w-2/3 ">
           <CardHeader>
             <CardTitle>Activity Overview</CardTitle>
           </CardHeader>
           <CardContent>
-            <main className='grid grid-cols-2 md:grid-cols-4 gap-4'>
+            <main className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {statistics.map((stat) => (
                 <section
                   key={stat.label}
                   className={cn(
-                    'flex flex-col gap-1 items-center justify-center p-4 rounded-lg',
+                    "flex flex-col gap-1 items-center justify-center p-4 rounded-lg",
                     stat.color
                   )}
                 >
-                  <stat.icon className={cn('size-6', stat.textColor)} />
-                  <p className='text-lg font-bold'>{stat.value}</p>
-                  <p className='text-xs text-muted-foreground'>{stat.label}</p>
+                  <stat.icon className={cn("size-6", stat.textColor)} />
+                  <p className="text-lg font-bold">{stat.value}</p>
+                  <p className="text-xs text-muted-foreground">{stat.label}</p>
                 </section>
               ))}
             </main>
@@ -217,32 +217,26 @@ function Profile() {
       {/* Activity Section */}
       <Card>
         <CardHeader>
-          <section className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
+          <section className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <CardTitle>
-              <h1 className='text-base md:text-lg'>Recent Activity</h1>
+              <h1 className="text-base md:text-lg">Recent Activity</h1>
             </CardTitle>
 
             {/* Activity Selector Dropdown */}
-            <div className='w-full sm:w-auto'>
-              <Select
-                value={content}
-                onValueChange={handleChange}
-              >
-                <SelectTrigger className='w-full text-xs md:text-sm'>
+            <div className="w-full sm:w-auto">
+              <Select value={content} onValueChange={handleChange}>
+                <SelectTrigger className="w-full text-xs md:text-sm">
                   <SelectValue
-                    placeholder='Select activity type'
-                    className='text-xs md:text-sm'
+                    placeholder="Select activity type"
+                    className="text-xs md:text-sm"
                   />
                 </SelectTrigger>
                 <SelectContent>
                   {activitiesOptions.map((option) => (
-                    <SelectItem
-                      key={option.value}
-                      value={option.value}
-                    >
-                      <div className='flex items-center gap-2'>
-                        <option.icon className='size-3 md:size-4' />
-                        <span className='text-xs md:text-sm'>
+                    <SelectItem key={option.value} value={option.value}>
+                      <div className="flex items-center gap-2">
+                        <option.icon className="size-3 md:size-4" />
+                        <span className="text-xs md:text-sm">
                           {option.label}
                         </span>
                       </div>

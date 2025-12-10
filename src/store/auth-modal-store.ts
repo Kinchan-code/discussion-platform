@@ -1,5 +1,6 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import localforage from "@/lib/localforage";
 
 /**
  * AuthModalStore
@@ -26,7 +27,8 @@ export const useAuthModalStore = create<AuthModalStore>()(
       setOpen: (open) => set({ isOpen: open }),
     }),
     {
-      name: 'auth-modal-storage', // Name of the storage key
+      name: "auth-modal-storage",
+      storage: createJSONStorage(() => localforage),
     }
   )
 );

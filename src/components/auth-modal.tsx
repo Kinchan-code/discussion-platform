@@ -1,4 +1,4 @@
-import { useAuthModalStore } from '@/store/auth-modal-store';
+import { useAuthModalStore } from "@/store/auth-modal-store";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,9 +8,9 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { PathName } from '@/models/path-enums';
-import { useNavigate } from 'react-router-dom';
+} from "@/components/ui/alert-dialog";
+import { PathName } from "@/enums/path-enums";
+import { useNavigate } from "react-router-dom";
 
 /**
  * AuthModal Component
@@ -46,10 +46,7 @@ function AuthModal() {
   };
 
   return (
-    <AlertDialog
-      open={isOpen}
-      onOpenChange={setOpen}
-    >
+    <AlertDialog open={isOpen} onOpenChange={setOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Authentication Required</AlertDialogTitle>

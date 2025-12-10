@@ -1,9 +1,10 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import localforage from "@/lib/localforage";
 
 /**
  * ReplyStore
- * @description This store manages the state of replies in the discussion platform, including which comment or reply has its reply form open, which replies are shown, and which comments or replies are highlighted.
+ * @description This store manages the state of replies in the discussion platform, including which comment or reply has its reply form open, which replies are shown.
  *
  * components used:
  * - Zustand: For state management.
@@ -19,14 +20,10 @@ interface ReplyStore {
   activeReplyCommentId: string | null;
   // Track which specific reply has its reply form open
   activeReplyReplyId: string | null;
-  // Track which comment has its replies shown
-  activeShowRepliesCommentId: string | null;
-  // Track which reply has its replies shown
-  activeShowRepliesReplyId: string | null;
-  // Highlighted comment ID for scrolling
-  highlightCommentId: string | null;
-  // Highlighted reply ID for scrolling
-  highlightReplyId: string | null;
+  // Track which comments have their replies shown (array to allow multiple)
+  activeShowRepliesCommentIds: string[];
+  // Track which replies have their replies shown (array to allow multiple)
+  activeShowRepliesReplyIds: string[];
   // Track if is editing a comment
   editingComment: string | null;
   // Track if is editing a reply
@@ -37,8 +34,6 @@ interface ReplyStore {
   setReplyReply: (replyId: string | null) => void;
   setShowRepliesComment: (commentId: string | null) => void;
   setShowRepliesReply: (replyId: string | null) => void;
-  setHighlightComment: (commentId: string | null) => void;
-  setHighlightReply: (replyId: string | null) => void;
   setEditingComment: (isEditing: string | null) => void;
   setEditingReply: (isEditing: string | null) => void;
 
@@ -54,10 +49,8 @@ const useReplyStore = create<ReplyStore>()(
     (set, get) => ({
       activeReplyCommentId: null,
       activeReplyReplyId: null,
-      activeShowRepliesCommentId: null,
-      activeShowRepliesReplyId: null,
-      highlightCommentId: null,
-      highlightReplyId: null,
+      activeShowRepliesCommentIds: [],
+      activeShowRepliesReplyIds: [],
       editingComment: null,
       editingReply: null,
 
@@ -80,26 +73,31 @@ const useReplyStore = create<ReplyStore>()(
       },
 
       setShowRepliesComment: (commentId) => {
-        const currentId = get().activeShowRepliesCommentId;
+        if (!commentId) {
+          set({ activeShowRepliesCommentIds: [] });
+          return;
+        }
+        const currentIds = get().activeShowRepliesCommentIds;
+        const isActive = currentIds.includes(commentId);
         set({
-          activeShowRepliesCommentId:
-            currentId === commentId ? null : commentId,
+          activeShowRepliesCommentIds: isActive
+            ? currentIds.filter((id) => id !== commentId)
+            : [...currentIds, commentId],
         });
       },
 
       setShowRepliesReply: (replyId) => {
-        const currentId = get().activeShowRepliesReplyId;
+        if (!replyId) {
+          set({ activeShowRepliesReplyIds: [] });
+          return;
+        }
+        const currentIds = get().activeShowRepliesReplyIds;
+        const isActive = currentIds.includes(replyId);
         set({
-          activeShowRepliesReplyId: currentId === replyId ? null : replyId,
+          activeShowRepliesReplyIds: isActive
+            ? currentIds.filter((id) => id !== replyId)
+            : [...currentIds, replyId],
         });
-      },
-
-      setHighlightComment: (commentId) => {
-        set({ highlightCommentId: commentId });
-      },
-
-      setHighlightReply: (replyId) => {
-        set({ highlightReplyId: replyId });
       },
 
       setEditingComment: (isEditing) => {
@@ -115,12 +113,13 @@ const useReplyStore = create<ReplyStore>()(
         get().activeReplyCommentId === commentId,
       isReplyReplyActive: (replyId) => get().activeReplyReplyId === replyId,
       isShowRepliesCommentActive: (commentId) =>
-        get().activeShowRepliesCommentId === commentId,
+        get().activeShowRepliesCommentIds.includes(commentId),
       isShowRepliesReplyActive: (replyId) =>
-        get().activeShowRepliesReplyId === replyId,
+        get().activeShowRepliesReplyIds.includes(replyId),
     }),
     {
-      name: 'reply-store',
+      name: "reply-store",
+      storage: createJSONStorage(() => localforage),
     }
   )
 );
