@@ -59,7 +59,6 @@ export const useDeleteThread = (onSuccess?: () => void) => {
     mutationFn: (threadId: string) => deleteThread(threadId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["threads-infinite"] });
-      queryClient.invalidateQueries({ queryKey: ["one-thread"] });
       queryClient.invalidateQueries({
         queryKey: ["threads-protocols-infinite"],
       });

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "@/api/axios-instance";
 import { PathName } from "@/enums/path-enums";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { slugify } from "@/lib/utils";
 
 import type { Response, ResponseError } from "@/types/response";
 import type { Protocols } from "@/types/protocols";
@@ -62,7 +63,9 @@ export const useCreateProtocol = (onSuccess?: () => void) => {
       queryClient.invalidateQueries({ queryKey: ["protocols-infinite"] });
       queryClient.invalidateQueries({ queryKey: ["one-protocol"] });
       onSuccess?.();
-      navigate(`${PathName.PROTOCOLS}/${data.data.id}`);
+      navigate(
+        `${PathName.PROTOCOLS}/${data.data.id}/${slugify(data.data.title)}`
+      );
     },
   });
 };

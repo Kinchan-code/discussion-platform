@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "@/api/axios-instance";
 import { PathName } from "@/enums/path-enums";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { slugify } from "@/lib/utils";
 
 import type { Threads } from "@/types/threads";
 import type { ResponseError, Response } from "@/types/response";
@@ -22,7 +23,7 @@ export const createThread = async (
   query: CreateThreadSchemaType
 ): Promise<Response<Threads>> => {
   try {
-    const response = await api.post<Response<Threads>>('/threads', query);
+    const response = await api.post<Response<Threads>>("/threads", query);
 
     const data = response.data;
 
@@ -54,7 +55,7 @@ export const useCreateThread = (onSuccess?: () => void) => {
   const navigate = useNavigate();
 
   return useMutation<Response<Threads>, ResponseError, CreateThreadSchemaType>({
-    mutationKey: ['create-thread'],
+    mutationKey: ["create-thread"],
     mutationFn: (params: CreateThreadSchemaType) => createThread(params),
     onSuccess: (data) => {
       // Invalidate threads query to refetch after creating a new thread
@@ -65,7 +66,9 @@ export const useCreateThread = (onSuccess?: () => void) => {
       });
 
       onSuccess?.();
-      navigate(`${PathName.THREADS}/${data.data.id}`);
+      navigate(
+        `${PathName.THREADS}/${data.data.id}/${slugify(data.data.title)}`
+      );
     },
   });
 };

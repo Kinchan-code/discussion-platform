@@ -59,7 +59,6 @@ export const useDeleteProtocol = (onSuccess?: () => void) => {
     mutationFn: (protocolId: string) => deleteProtocol(protocolId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["protocols-infinite"] });
-      queryClient.invalidateQueries({ queryKey: ["one-protocol"] });
       queryClient.invalidateQueries({ queryKey: ["user-statistics"] });
       onSuccess?.();
     },
